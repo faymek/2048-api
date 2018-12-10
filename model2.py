@@ -128,8 +128,8 @@ def model_fn(features, labels, mode):
 
 
 # Build the Estimator
-model = tf.estimator.Estimator(model_fn)
-
+tf.logging.set_verbosity(tf.logging.INFO)
+model = tf.estimator.Estimator(model_fn=model_fn,model_dir="./mymodels")
 
 # In[36]:
 
@@ -139,7 +139,7 @@ input_fn = tf.estimator.inputs.numpy_input_fn(
     x={'images': images}, y=labels,
     batch_size=batch_size, num_epochs=None, shuffle=True)
 # Train the Model
-model.train(input_fn, steps=100000)
+model.train(input_fn, steps=1000000)
 
 
 # In[34]:
@@ -153,23 +153,4 @@ input_fn = tf.estimator.inputs.numpy_input_fn(
 # Use the Estimator 'evaluate' method
 model.evaluate(input_fn)
 
-
-# In[21]:
-
-
-# Predict single images
-n_images = 4
-# Get images from test set
-test_images = images[1000:1000+n_images]
-# Prepare the input data
-input_fn = tf.estimator.inputs.numpy_input_fn(
-    x={'images': images}, shuffle=False)
-# Use the model to predict the images class
-preds = list(model.predict(input_fn))
-
-# Display
-for i in range(n_images):
-    plt.imshow(np.reshape(test_images[i], [8, 8]), cmap='gray')
-    plt.show()
-    print("Model prediction:", preds[i])
 
