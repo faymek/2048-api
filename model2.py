@@ -139,7 +139,7 @@ input_fn = tf.estimator.inputs.numpy_input_fn(
     x={'images': images}, y=labels,
     batch_size=batch_size, num_epochs=None, shuffle=True)
 # Train the Model
-model.train(input_fn, steps=1000000)
+model.train(input_fn, steps=10000000)
 
 
 # In[34]:
