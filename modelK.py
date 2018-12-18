@@ -37,7 +37,7 @@ def grid_one(arr):
 
 import csv
 data = []
-with open("train_3_1200K.csv") as f:
+with open("./train/train1M_2.csv") as f:
     for line in f:
         piece = eval(line)
         data.append(piece)
@@ -59,7 +59,7 @@ y = keras.utils.to_categorical(data[:,-1], 4)
 # In[10]:
 
 
-sep = 1100000
+sep = 900000
 x_train = x[:sep]
 x_test = x[sep:]
 y_train = y[:sep]
@@ -82,7 +82,7 @@ model = keras.models.load_model('model_k.h5')
 
 
 # train , validation_data=(x_test,y_test)
-model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=1, verbose=1)
+model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=30)
 
 
 # In[48]:

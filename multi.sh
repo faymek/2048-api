@@ -6,4 +6,4 @@
 #SBATCH --error=log.%j.err
 #SBATCH -t 10:00:00
 module load anaconda3/5.3.0
-python multi.py >> /dev/null 
+python dataK_multi.py >> /dev/null 
