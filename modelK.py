@@ -37,7 +37,7 @@ def grid_one(arr):
 
 import csv
 data = []
-with open("./train/train1M_2.csv") as f:
+with open("./train12/data2M.csv") as f:
     for line in f:
         piece = eval(line)
         data.append(piece)
@@ -59,7 +59,7 @@ y = keras.utils.to_categorical(data[:,-1], 4)
 # In[10]:
 
 
-sep = 900000
+sep = 2000000
 x_train = x[:sep]
 x_test = x[sep:]
 y_train = y[:sep]
@@ -78,22 +78,27 @@ x_test.shape
 model = keras.models.load_model('model_k.h5')
 
 
-# In[13]:
 
-
-# train , validation_data=(x_test,y_test)
-model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=30)
-
-
-# In[48]:
-
+model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
 
 score_test = model.evaluate(x_test,y_test,verbose=0)
 print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
 
+model.save('model_k.h5') 
 
-# In[15]:
 
+model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
 
-model.save('model_k.h5')  # creates a HDF5 file 'my_model.h5'
+score_test = model.evaluate(x_test,y_test,verbose=0)
+print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
+
+model.save('model_k.h5')
+
+model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
+
+score_test = model.evaluate(x_test,y_test,verbose=0)
+print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
+
+model.save('model_k.h5')
+
 

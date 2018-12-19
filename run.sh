@@ -7,4 +7,4 @@
 #SBATCH -t 14:00:00
 #SBATCH --gres=gpu:1
 module load anaconda3/5.3.0
-python model.py
+python modelK.py
