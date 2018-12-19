@@ -8,3 +8,5 @@
 #SBATCH --gres=gpu:1
 module load anaconda3/5.3.0
 python modelK.py
+
+

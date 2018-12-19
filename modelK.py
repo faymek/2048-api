@@ -1,11 +1,3 @@
-
-# coding: utf-8
-
-# # 2048 Keras
-
-# In[1]:
-
-
 import keras
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Input, concatenate, BatchNormalization, Activation
@@ -14,9 +6,6 @@ import numpy as np
 
 BATCH_SIZE = 128
 NUM_EPOCHS = 15
-
-
-# In[2]:
 
 
 OUT_SHAPE = (4,4)
@@ -32,73 +21,31 @@ def grid_one(arr):
     return ret
 
 
-# In[3]:
-
-
 import csv
 data = []
-with open("./train12/data2M.csv") as f:
+with open("./train12/data1M.csv") as f:
     for line in f:
         piece = eval(line)
         data.append(piece)
 
-
-# In[5]:
-
-
 data = np.array(data)
-
-
-# In[9]:
-
 
 x = np.array([ grid_one(piece[:-1].reshape(4,4)) for piece in data ])
 y = keras.utils.to_categorical(data[:,-1], 4)
 
-
-# In[10]:
-
-
-sep = 2000000
+sep = 900000
 x_train = x[:sep]
 x_test = x[sep:]
 y_train = y[:sep]
 y_test = y[sep:]
 
-
-# In[11]:
-
-
-x_test.shape
-
-
-# In[12]:
-
-
-model = keras.models.load_model('model_k.h5')
-
-
+model = keras.models.load_model('model_ol.h5')
 
 model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
 
 score_test = model.evaluate(x_test,y_test,verbose=0)
 print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
 
-model.save('model_k.h5') 
-
-
-model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
-
-score_test = model.evaluate(x_test,y_test,verbose=0)
-print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
-
-model.save('model_k.h5')
-
-model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
-
-score_test = model.evaluate(x_test,y_test,verbose=0)
-print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
-
-model.save('model_k.h5')
+model.save('model.h5') 
 
 

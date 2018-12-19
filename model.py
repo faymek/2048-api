@@ -1,11 +1,3 @@
-
-# coding: utf-8
-
-# # 2048 Keras
-
-# In[1]:
-
-
 import keras
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Input, concatenate, BatchNormalization, Activation
@@ -14,10 +6,6 @@ import numpy as np
 
 BATCH_SIZE = 128
 NUM_EPOCHS = 15
-
-
-# In[2]:
-
 
 OUT_SHAPE = (4,4)
 CAND = 16
@@ -32,14 +20,12 @@ def grid_one(arr):
     return ret
 
 
-# In[3]:
-
 
 import csv
-model = keras.models.load_model('model_k.h5')
+model = keras.models.load_model('model.h5')
 
-for it in range(3):
-    for index in range(6):
+for it in range(1):
+    for index in range(15):
         data = []
         with open("./train/train1M_%d.csv"%(index+1)) as f:
             for line in f:
@@ -57,7 +43,7 @@ for it in range(3):
         y_train = y[:sep]
         y_test = y[sep:]
 
-        model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
+        model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=5)
         
-        model.save('model_k.h5')
+        model.save('model.h5')
 

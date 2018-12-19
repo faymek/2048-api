@@ -77,16 +77,15 @@ class ModelWrapper:
 
 MEMORY = 32768
 BATCH = 1024
-MAXSTEP = 1000000
 
 model = keras.models.load_model('modelOL.h5')
 mw = ModelWrapper(model,MEMORY)
 
-for i in range(MAXSTEP):
+while True:
     game = Game(4, random=False)
     while not game.end:
         mw.move(game)
-    print('score:',game.score)
+    print('score:',game.score, end='\t')
     mw.train(BATCH)
     if(mw.trainning_step%10==0):
         model.save('modelOL.h5')

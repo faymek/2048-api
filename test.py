@@ -4,7 +4,7 @@ from game2048.agents import Agent, RandomAgent, ExpectiMaxAgent
 import numpy as np
 import keras
 
-model = keras.models.load_model('model_k.h5')
+model = keras.models.load_model('model_ol.h5')
 
 OUT_SHAPE = (4,4)
 CAND = 16
@@ -39,4 +39,4 @@ for i in range(10):
     agent.play()
     scores.append(game.score)
 print(scores)
-
+print("Average scores: @10 times", sum(scores) / len(scores))
