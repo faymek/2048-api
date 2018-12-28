@@ -1,0 +1,12 @@
+Using TensorFlow backend.
+2018-12-27 23:45:55.668441: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2018-12-27 23:45:57.755177: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:66:00.0
+totalMemory: 10.92GiB freeMemory: 10.76GiB
+2018-12-27 23:45:57.755685: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2018-12-27 23:46:05.741014: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-12-27 23:46:05.741428: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2018-12-27 23:46:05.741685: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2018-12-27 23:46:05.742184: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10409 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:66:00.0, compute capability: 6.1)
+slurmstepd: error: *** JOB 5560 ON node12 CANCELLED AT 2018-12-28T16:18:02 ***

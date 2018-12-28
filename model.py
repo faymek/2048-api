@@ -1,16 +1,17 @@
 import keras
-from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Input, concatenate, BatchNormalization, Activation
-from keras.optimizers import Adadelta
+from keras.models import Model
 import numpy as np
 
-BATCH_SIZE = 128
-NUM_EPOCHS = 15
+import random
+from collections import namedtuple
+from game2048.game import Game
+from game2048.expectimax import board_to_move
 
 OUT_SHAPE = (4,4)
 CAND = 16
-#map_table = {2**i : i for i in range(1,CAND)}
-#map_table[0] = 0
+map_table = {2**i : i for i in range(1,CAND)}
+map_table[0] = 0
+vmap = np.vectorize(lambda x: map_table[x])
 
 def grid_one(arr):
     ret = np.zeros(shape=OUT_SHAPE+(CAND,),dtype=bool)  # shape = (4,4,16)
@@ -20,30 +21,79 @@ def grid_one(arr):
     return ret
 
 
+Guide = namedtuple('Guides', ('state', 'action'))
 
-import csv
-model = keras.models.load_model('model.h5')
-
-for it in range(1):
-    for index in range(15):
-        data = []
-        with open("./train/train1M_%d.csv"%(index+1)) as f:
-            for line in f:
-                piece = eval(line)
-                data.append(piece)
-
-        data = np.array(data)
-
-        x = np.array([ grid_one(piece[:-1].reshape(4,4)) for piece in data ])
-        y = keras.utils.to_categorical(data[:,-1], 4)
-
-        sep = 1000000
-        x_train = x[:sep]
-        x_test = x[sep:]
-        y_train = y[:sep]
-        y_test = y[sep:]
-
-        model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=5)
+class Guides:
+    
+    def __init__(self, cap):
+        self.cap = cap
+        self.mem = []
+        self.pos = 0
         
-        model.save('model.h5')
+    def push(self, *args):
+        if len(self.mem) < self.cap:
+            self.mem.append(None)
+        self.mem[self.pos] = Guide(*args)
+        self.pos = (self.pos + 1) % self.cap
+        
+    def sample(self, batch_size):
+        return random.sample(self.mem, batch_size)
+    
+    def ready(self,batch_size):
+        return len(self.mem) >= batch_size
+    
+    def __len__(self):
+        return len(self.mem)
+    
+    
+class ModelWrapper:
+    
+    def __init__(self, model, cap):
+        self.model = model
+        self.mem = Guides(cap)
+        self.trainning_step = 0
+        
+    def predict(self, board):
+        return model.predict(np.expand_dims(board,axis=0))
+    
+    def move(self, game):
+        ohe_board = grid_one(vmap(game.board))
+        d = board_to_move(game.board)        
+        self.mem.push(ohe_board, d)
+        if random.random() < 0.5:
+            game.move(d)
+        else :
+            game.move(self.predict(ohe_board).argmax())
+        
+    def train(self, batch):
+        if self.mem.ready(batch):
+            guides = self.mem.sample(batch)
+            X = []
+            Y = []
+            for guide in guides:
+                X.append(guide.state)
+                ohe_action = [0]*4
+                ohe_action[guide.action] = 1
+                Y.append(ohe_action)
+            loss, acc = self.model.train_on_batch(np.array(X), np.array(Y))
+            print('#%d \t loss:%.3f \t acc:%.3f'%(self.trainning_step, float(loss), float(acc)))
+            self.trainning_step += 1
 
+MEMORY = 262144
+BATCH = 16384
+
+model = keras.models.load_model('best/model.h5')
+mw = ModelWrapper(model,MEMORY)
+
+while True:
+    game = Game(4, random=False)
+    while not game.end:
+        mw.move(game)
+    print('score:',game.score, end='\t')
+
+    mw.train(BATCH)
+
+    if(mw.trainning_step%10==0):
+        model.save('best/model.h5')
+        if(mw.trainning_step%1000==0):
+            model.save('best/model_%d.h5'%mw.trainning_step)
