@@ -55,7 +55,7 @@ class BigDataAgent(ExpectiMaxAgent):
 THREAD_NUM = 4
 LOGFILE_NUM = 3
 LOGFILE_STEP = 1000000
-AGENT_ACC = 0.6
+AGENT_ACC = 1
 SCORE = 2048
 
 import os
