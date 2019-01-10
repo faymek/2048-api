@@ -4,6 +4,7 @@ from game2048.agents import Agent, RandomAgent, ExpectiMaxAgent
 import numpy as np
 import keras
 
+ntest = 50
 model1 = keras.models.load_model('dev/model.h5')
 model2 = keras.models.load_model('best/model.h5')
 
@@ -38,10 +39,10 @@ class MyAgent(Agent):
         return direction
 
 scores = []
-for i in range(50):
+for i in range(ntest):
     game = Game(4, random=False)
     agent = MyAgent(game, display=None)
     agent.play()
     scores.append(game.score)
 print(scores)
-print("Average scores: @50 times", sum(scores) / len(scores))
+print("Average scores: @%d times"%ntest, sum(scores) / len(scores))

@@ -77,13 +77,13 @@ class ModelWrapper:
             self.trainning_step += 1
 
 MEMORY = 65536
-BATCH = 2048
+BATCH = 4096
 
 model = keras.models.load_model('dev/model.h5')
 mw = ModelWrapper(model,MEMORY)
 
 while True:
-    game = Game(4, random=False, score_to_win=512)
+    game = Game(4, random=False, score_to_win=1024)
     while not game.end:
         mw.move(game)
     print('score:',game.score, end='\t')

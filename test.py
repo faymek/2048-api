@@ -4,7 +4,8 @@ from game2048.agents import Agent, RandomAgent, ExpectiMaxAgent
 import numpy as np
 import keras
 
-model = keras.models.load_model('best/model.h5')
+ntest = 50
+model = keras.models.load_model('dev/model.h5')
 
 OUT_SHAPE = (4,4)
 CAND = 16
@@ -32,11 +33,12 @@ class MyAgent(Agent):
         direction = np.argmax(preds[0])
         return direction
 
+
 scores = []
-for i in range(50):
+for i in range(ntest):
     game = Game(4, random=False)
     agent = MyAgent(game, display=None)
     agent.play()
     scores.append(game.score)
-print(scores)
-print("Average scores: @50 times", sum(scores) / len(scores))
+print("\n",scores)
+print("Average scores: @%d times"%ntest, sum(scores) / len(scores))

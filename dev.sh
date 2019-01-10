@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J OL2048
+#SBATCH -J OL2048-base
 #SBATCH -p gpu
 #SBATCH -N 1
 #SBATCH --output=log.%j.out

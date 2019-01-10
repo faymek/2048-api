@@ -77,6 +77,7 @@ class ModelWrapper:
 
 MEMORY = 32768
 BATCH = 1024
+ARCHIEVE = 1000
 
 model = keras.models.load_model('modelOL.h5')
 mw = ModelWrapper(model,MEMORY)
@@ -89,5 +90,5 @@ while True:
     mw.train(BATCH)
     if(mw.trainning_step%10==0):
         model.save('modelOL.h5')
-        if(mw.trainning_step%1000==0):
+        if(mw.trainning_step%ARCHIEVE==0):
             model.save('modelOL_%d.h5'%mw.trainning_step)

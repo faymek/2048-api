@@ -6,7 +6,9 @@ import numpy as np
 
 BATCH_SIZE = 128
 NUM_EPOCHS = 15
-
+DATASET = "train12/data1M.csv"
+MODEL_LOAD = "modelK.h5"
+MODEL_SAVE = "modelK.h5" 
 
 OUT_SHAPE = (4,4)
 CAND = 16
@@ -23,7 +25,7 @@ def grid_one(arr):
 
 import csv
 data = []
-with open("./train12/data1M.csv") as f:
+with open(DATASET) as f:
     for line in f:
         piece = eval(line)
         data.append(piece)
@@ -39,13 +41,13 @@ x_test = x[sep:]
 y_train = y[:sep]
 y_test = y[sep:]
 
-model = keras.models.load_model('model_ol.h5')
+model = keras.models.load_model(MODEL_LOAD)
 
 model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=10)
 
 score_test = model.evaluate(x_test,y_test,verbose=0)
 print('Testing loss: %.4f, Testing accuracy: %.2f' % (score_test[0],score_test[1]))
 
-model.save('model.h5') 
+model.save(MODEL_SAVE) 
 
 
