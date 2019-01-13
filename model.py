@@ -60,7 +60,7 @@ class ModelWrapper:
         ohe_board = grid_one(vmap(game.board))
         d = board_to_move(game.board)        
         self.mem.push(ohe_board, d)
-        if random.random() < 0.3:
+        if random.random() < 0.6:
             game.move(d)
         else :
             game.move(self.predict(ohe_board).argmax())
