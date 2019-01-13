@@ -3,9 +3,10 @@ from game2048.displays import Display, IPythonDisplay
 from game2048.agents import Agent, RandomAgent, ExpectiMaxAgent
 import numpy as np
 import keras
+import time
 
 ntest = 50
-model = keras.models.load_model('dev/model.h5')
+model = keras.models.load_model('best/model.h5')
 
 OUT_SHAPE = (4,4)
 CAND = 16
@@ -33,12 +34,18 @@ class MyAgent(Agent):
         direction = np.argmax(preds[0])
         return direction
 
-
+steps = 0
 scores = []
+time_start=time.time()
 for i in range(ntest):
     game = Game(4, random=False)
     agent = MyAgent(game, display=None)
-    agent.play()
+    while not game.end:
+        game.move(agent.step())
+        steps+=1
     scores.append(game.score)
+time_end=time.time()
+print("steps",steps)
+print('totally cost',time_end-time_start)
 print("\n",scores)
 print("Average scores: @%d times"%ntest, sum(scores) / len(scores))
